@@ -5,4 +5,5 @@ then
 	echo Starting RabbitMQ
 	sudo service rabbitmq-server start 
 	echo Checking server status...
+	sudo systemctl status rabbitmq-server
 fi
