@@ -5,4 +5,5 @@ then
 	echo Starting MySQL
 	sudo service mysql start 
 	echo Checking status...
+	sudo systemctl status mysql
 fi
