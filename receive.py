@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 import pika
 
+credentials = pika.PlainCredentials('admin', 'admin')
 connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 channel = connection.channel()
 channel.queue_declare(queue='hello')
 
 def callback(ch, method, properties, body):
     print(" [x] Received %r" % body)
+    time.sleep(body.count(b'.'))
+    print(" [x] Done")
 channel.basic_consume(queue='hello',
                       auto_ack=True,
                       on_message_callback=callback)
@@ -21,4 +24,5 @@ if __name__ == '__main__':
             sys.exit(0)
         except SystemExit:
             os._exit(0)
+
 
