@@ -1,5 +1,4 @@
 <?php
-require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
@@ -8,7 +7,7 @@ if(isset($argv[1])){
 	$msg = $argv[1];
 }
 else{
-	$msg = array("message"=>"test message", "type"=>"echo");
+	$msg = array("message"=>"Register", "type"=>"register", "username"=>"test", "password"=>"1234");
 }
 
 $response = $client->send_request($msg);
@@ -18,4 +17,5 @@ print_r($response);
 echo "\n\n";
 
 if(isset($argv[0]))
-echo $argv[0] . " END".PHP_EOL;
+	echo $argv[0] . " END".PHP_EOL;
+?>
