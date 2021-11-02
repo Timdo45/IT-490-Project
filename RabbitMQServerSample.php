@@ -15,28 +15,6 @@ $db = new PDO("mysql:host=$servername; dbname=$dbname", $username, $password);
   // set the PDO error mode to exception
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-function login2($email, $pass){
-	global $db;
-
-	//checking if username exists already
-	$usncheck = $db->prepare('SELECT * FROM user WHERE email = :email');
-	if (!$usncheck)
-		echo "problem";
-		return;
-	$usncheck->bindParam(':email', $email);
-	$usncheck->execute();
-	$results = $usncheck->fetch(PDO::FETCH_ASSOC);
-	if($results && count($results) > 0){
-		echo "Username already exists";
-		return false;
-	}
-	//check passed, inserts user
-	$quest = 'INSERT INTO user (email, password) VALUES (:email, :password)';
-	$stmt = $db->prepare($quest);
-	$stmt->bindParam(':username', $email);
-	$stmt->bindParam(':password', $pass);
-	$stmt->execute();
-}
 function login($email,$pass){
 	//TODO Make login function
 	global $db;
@@ -61,24 +39,6 @@ function login($email,$pass){
 		echo "invalid password";
 	}
 	}
-}
-function register2($usern, $pass){
-	global $db;
-
-	//checking if username exists already
-	$usncheck = $db->prepare('SELECT * FROM user WHERE (?)');
-	$usncheck->bind_param('s', $usern);
-	$stmt2 = $usncheck->execute();
-	//check passed, inserts user
-	$quest = 'INSERT INTO user (username) VALUES (?)';
-	$stmt = $db->prepare($quest);
-	$stmt->bind_Param('s', $usern);
-	$stmt->execute();
-	$quest2 = ('INSERT INTO user (password) VALUES (?)');
-        $stmt = $db->prepare($quest);
-        $stmt->bind_Param('s', $pass);
-        $stmt->execute();
-
 }
 function register($username, $pass){
 	global $db;
