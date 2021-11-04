@@ -8,6 +8,8 @@ function login ($email,$pass){
 	echo $email; 
 	echo $pass;
 	return true;
+	echo $email;
+	echo $pass;
 
 }
 function register($email, $pass){

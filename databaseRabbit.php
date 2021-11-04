@@ -15,20 +15,20 @@ $db = new PDO("mysql:host=$servername; dbname=$dbname", $username, $password);
   // set the PDO error mode to exception
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-function login($email,$pass){
+function login($username,$pass){
 	//TODO Make login function
 	global $db;
-	$stmt = $db->prepare("SELECT email, password FROM user WHERE email=(?)");
-	$stmt->bind_param('s', $email);
+	$stmt = $db->prepare('SELECT * FROM user WHERE username = :username');
+	$stmt->bindParam(':username', $username);
 	$stmt->execute();
-	$results = $stmt->fetch_assoc();
+	$results = $stmt->fetch(PDO::FETCH_ASSOC);
 	if($results){
 		$userpass = $results['password'];
 		if($pass == $userpass){ //comparing passwords
-			$stmt->bindParam(':email', $email);
+			$stmt->bindParam(':username', $username);
 			$stmt->execute();
 			if($results && count($results) > 0){
-				$userSes = array("email"=> $results['email']);
+				$userSes = array("username"=> $results['username']);
 				return json_encode($userSes);
 			}
 			return true;

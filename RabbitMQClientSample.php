@@ -4,7 +4,7 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
 function registerMessage($Username, $Password){
-	$client = new RabbitMQClient('testRabbitMQ.ini', 'sampleServer');
+	$client = new RabbitMQClient('frontendRabbitMQ.ini', 'sampleServer');
 	if(isset($argv[1])){
 	}
 	else{
@@ -26,7 +26,7 @@ function registerMessage($Username, $Password){
 
 function loginMessage($Username, $Password){
 
-	$client = new RabbitMQClient('testRabbitMQ.ini', 'sampleServer');
+	$client = new RabbitMQClient('frontendRabbitMQ.ini', 'sampleServer');
 	if(isset($argv[1])){
 		$msg = $argv[1];
 	}
@@ -44,4 +44,4 @@ function loginMessage($Username, $Password){
 	if(isset($argv[0]))
 		echo $argv[0] . " END".PHP_EOL;
 }
-registerMessage("Exam","Password1");
+loginMessage("Exam","Password1");
