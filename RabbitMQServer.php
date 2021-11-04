@@ -3,19 +3,35 @@
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
+ $clientB = new RabbitMQClient('backendRabbitMQ.ini', 'it490Server');
+ $clientD = new RabbitMQClient('databaseRabbitMQ.ini', 'it490Server');
 
 function login ($email, $pass){
-	
+  	if(isset($argv[1])){
+                $msg = $argv[1];
+        }
+        else{
+                $msg = array("message"=>"Login", "type"=>"login", "username" => $email, "password" => $pass);	
 
-}
+	}
+	$responseB = $clientB->send_request($msg);
+	if($responseB){
+		$responseD = $clientD->send_request($msg)
+		if($responseD){
+			echo "User information is in the database";
+			return true;
+		}
+		else{
+			echo "Database failed to confirm";
+			return false;
+		}
+	}
 function register ($email, $pass){
-	$clientB = new RabbitMQClient('backendRabbitMQ.ini', 'it490Server');
-	$clientD = new RabbitMQClient('databaseRabbitMQ.ini', 'it490Server');
 	if(isset($argv[1])){
 		$msg = $argv[1];
 	}
 	else{
-		$msg = array("message"=>"Login", "type"=>"login", "username" => $email, "password" => $pass);
+		$msg = array("message"=>"Register", "type"=>"register", "username" => $email, "password" => $pass);
 		//server listens for "login" in processor function then points to login function
 	}
 
@@ -23,6 +39,14 @@ function register ($email, $pass){
 
 	if($responseB){
 		$responseD = $clientD->send_request($msg);
+		if($responseD){
+			echo "Database received request";
+			return true;
+		}
+		else{
+			echo "Database could not execute";
+			return false;
+		}
 	}
 	else{
 		echo "Backend could not verify";
