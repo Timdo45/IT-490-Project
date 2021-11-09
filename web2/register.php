@@ -3,24 +3,24 @@
 require_once __DIR__ . '/vendor/autoload.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-
+require("/home/test/IT490/RabbitMQClientSample.php")
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-$connection = new AMQPStreamConnection('10.244.0.6', 5672, 'admin', 'admin');
-$channel = $connection->channel();
+    if ($username != "" && $password != ""){
+        $rabbitResponse = registerMessage($username, $password);
 
-$channel->queue_declare('username', false, false, false, false);
-$channel->queue_declare('password', false, false, false, false);
+        if($rabbitResponse==false){
+            echo "account already created";
 
-$msg = new AMQPMessage($username);
-$msg2 = new AMQPMessage($password);
-$channel->basic_publish($msg, '', 'username');
-$channel->basic_publish($msg2, '', 'password');
+        }else{
 
+            echo "Account is created";
+            header("Location: login.html");
 
-echo " [x] Sent 'Hello World!'\n";
+        }
+    }else{
+        echo "Nothing entered";
+    }
 
-$channel->close();
-$connection->close();
 ?>
