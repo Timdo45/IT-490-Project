@@ -34,6 +34,8 @@ function login ($email, $pass){
 	}
 }
 function register ($email, $pass){
+	global $clientB;
+	global $clientD;
 	if(isset($argv[1])){
 		$msg = $argv[1];
 	}

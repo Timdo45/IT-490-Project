@@ -3,10 +3,11 @@
 require_once __DIR__ . '/vendor/autoload.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-require("/home/test/IT490/RabbitMQClientSample.php")
+require("/home/test/IT490/RabbitMQClientSample.php");
 $username = $_POST['username'];
 $password = $_POST['password'];
-
+$username = "asdf";
+$password = "asdf";
     if ($username != "" && $password != ""){
         $rabbitResponse = registerMessage($username, $password);
 

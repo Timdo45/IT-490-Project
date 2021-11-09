@@ -39,6 +39,7 @@ function login($username,$pass){
 		echo "invalid password";
 	}
 	}
+	else{ return false;}
 }
 function register($username, $pass){
 	global $db;
