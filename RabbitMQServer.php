@@ -3,11 +3,9 @@
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
-$clientB = new RabbitMQClient('backendRabbitMQ.ini', 'it490Server');
 $clientD = new RabbitMQClient('databaseRabbitMQ.ini', 'it490Server');
 
 function login ($email, $pass){
-	global $clientB;
 	global $clientD;
   	if(isset($argv[1])){
                 $msg = $argv[1];
@@ -16,8 +14,6 @@ function login ($email, $pass){
                 $msg = array("message"=>"Login", "type"=>"login", "username" => $email, "password" => $pass);	
 
 	}
-	$responseB = $clientB->send_request($msg);
-	if($responseB){
 		$responseD = $clientD->send_request($msg);
 		if($responseD){
 			echo "User information is in the database";
@@ -27,14 +23,8 @@ function login ($email, $pass){
 			echo "Database failed to confirm";
 			return false;
 		}
-	}
-	else{
-		echo "Backend failed to verify";
-		return false;
-	}
 }
 function register ($email, $pass){
-	global $clientB;
 	global $clientD;
 	if(isset($argv[1])){
 		$msg = $argv[1];
@@ -44,9 +34,6 @@ function register ($email, $pass){
 
 	}
 
-	$responseB = $clientB->send_request($msg);
-
-	if($responseB){
 		$responseD = $clientD->send_request($msg);
 		if($responseD){
 			echo "Database received request";
@@ -56,11 +43,6 @@ function register ($email, $pass){
 			echo "Database could not execute";
 			return false;
 		}
-	}
-	else{
-		echo "Backend could not verify";
-		return false;
-	}
 
 }
 function request_processor($req){
