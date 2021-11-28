@@ -44,4 +44,5 @@ function loginMessage($Username, $Password){
 	if(isset($argv[0]))
 		echo $argv[0] . " END".PHP_EOL;
 }
-
+loginMessage("thing","thing");
+?>

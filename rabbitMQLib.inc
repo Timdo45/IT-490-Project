@@ -36,8 +36,21 @@ class rabbitMQServer
 		$this->queue = $this->machine[$server]["QUEUE"];
 	}
 	function get_connection(){
-		return new AMQPStreamConnection($this->BROKER_HOST, $this->BROKER_PORT,
-					$this->USER, $this->PASSWORD);
+		try{
+			 return new AMQPStreamConnection($this->BROKER_HOST, $this->BROKER_PORT, $this->USER, $this->PASSWORD);
+
+		}
+		catch(Exception $e){
+			try{
+			       	return new AMQPStreamConnection("cluster1", $this->BROKER_PORT, $this->USER, $this->PASSWORD);
+
+			}
+			 catch(Exception $e){
+                        	die("failed to connect to RabbitMQ: ". $e->getMessage()."\n");
+                }
+		
+	
+		}
 	}
 	function process_message($req){
 		echo "processing message \n";
@@ -100,7 +113,7 @@ class rabbitMQServer
 			echo "Consuming queue\n";
 			$channel->basic_qos(null, 1, null);
 			$channel->basic_consume($this->queue, '',
-			false, true, false, false, array($this, 'process_message'));
+			true, false, false, false, array($this, 'process_message'));
 
 			// Loop as long as the channel has callbacks registered
 			while (count($this->conn_queue->callbacks) && $this->conn_queue->is_consuming())
@@ -149,8 +162,22 @@ class rabbitMQClient
 		$this->consume();
 	}
 	function get_connection(){
-		return new AMQPStreamConnection($this->BROKER_HOST, $this->BROKER_PORT,
-					$this->USER, $this->PASSWORD);
+		         try{
+                         return new AMQPStreamConnection($this->BROKER_HOST, $this->BROKER_PORT, $this->USER, $this->PASSWORD);
+
+                }
+                catch(Exception $e){
+                        try{
+                                return new AMQPStreamConnection("cluster1", $this->BROKER_PORT, $this->USER, $this->PASSWORD);
+
+                        }
+                         catch(Exception $e){
+                                die("failed to connect to RabbitMQ: ". $e->getMessage()."\n");
+                }
+
+
+                }
+
 	}
 	function process_response($response){
 		$uid = $response->get('correlation_id');
@@ -181,7 +208,7 @@ class rabbitMQClient
 				true,
 				false
 			);*/
-		$this->channel->basic_consume($this->callback_queue, '', false, true, false, false,
+		$this->channel->basic_consume($this->callback_queue, '', true, false, false, false,
 		array($this, 'process_response'));
 	}
 	function send_request($message){

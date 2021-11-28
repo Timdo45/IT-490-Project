@@ -68,7 +68,6 @@ function request_processor($req){
 }
 
 $server = new rabbitMQServer("frontendRabbitMQ.ini", "sampleServer");
-
 echo "Rabbit MQ Server Start" . PHP_EOL;
 $server->process_requests('request_processor');
 echo "Rabbit MQ Server Stop" . PHP_EOL;
