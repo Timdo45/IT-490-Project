@@ -3,7 +3,7 @@
 $curl = curl_init();
 
 curl_setopt_array($curl, [
-	CURLOPT_URL => "https://rawg-video-games-database.p.rapidapi.com/games",
+	CURLOPT_URL => "https://twitch-game-popularity.p.rapidapi.com/game?name=League%20of%20Legends&year=2021&month=08",
 	CURLOPT_RETURNTRANSFER => true,
 	CURLOPT_FOLLOWLOCATION => true,
 	CURLOPT_ENCODING => "",
@@ -12,8 +12,8 @@ curl_setopt_array($curl, [
 	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 	CURLOPT_CUSTOMREQUEST => "GET",
 	CURLOPT_HTTPHEADER => [
-		"https://api.rawg.io/api/games,
-		key=760cb54b18044c3b970e39ae77198265"
+		"x-rapidapi-host: twitch-game-popularity.p.rapidapi.com",
+		"x-rapidapi-key: 2f7ad4e9ebmsh8bdead9090d5e1ep196ec0jsn83ae003f08fa"
 	],
 ]);
 
@@ -27,4 +27,3 @@ if ($err) {
 } else {
 	echo $response;
 }
-?>
