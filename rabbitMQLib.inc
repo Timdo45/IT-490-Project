@@ -54,7 +54,7 @@ class rabbitMQServer
 	}
 	function process_message($req){
 		echo "processing message \n";
-		// send the ack to clear the item from the queue
+		//send the ack to clear the item from the queue
 		/*if ($msg->delivery_info['routing_key'] !== "*"){
 			echo "routing_key: " . $msg->delivery_info['routing_key'];
 
@@ -80,7 +80,7 @@ class rabbitMQServer
 					(string)json_encode($response),
 					array('correlation_id'=>$req->get('correlation_id'))
 				);
-				echo "Replying to " . $req->get('reply_to') . "\n";
+				//echo "Replying to " . $req->get('reply_to') . "\n";
 				$req->delivery_info['channel']->basic_publish(
 					$msg,
 					'',
@@ -109,11 +109,11 @@ class rabbitMQServer
 			$conn = $this->get_connection();
 			$channel = $conn->channel();
 			$this->conn_queue = $channel;
-			$channel->queue_declare($this->queue, false, false, false, true);
+			$channel->queue_declare($this->queue, false, true, true, false);
 			echo "Consuming queue\n";
 			$channel->basic_qos(null, 1, null);
 			$channel->basic_consume($this->queue, '',
-			true, false, false, false, array($this, 'process_message'));
+			false, true, false, false, array($this, 'process_message'));
 
 			// Loop as long as the channel has callbacks registered
 			while (count($this->conn_queue->callbacks) && $this->conn_queue->is_consuming())
@@ -208,7 +208,7 @@ class rabbitMQClient
 				true,
 				false
 			);*/
-		$this->channel->basic_consume($this->callback_queue, '', true, false, false, false,
+		$this->channel->basic_consume($this->callback_queue, '', false, true, false, false,
 		array($this, 'process_response'));
 	}
 	function send_request($message){

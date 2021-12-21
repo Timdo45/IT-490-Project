@@ -6,15 +6,32 @@ error_reporting(E_ALL);
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
-
+$db;
+function get_connection(){
+try{
 $servername = "serverc.example.com";
 $username = "test";
 $password = "password";
 $dbname = "test";
-$db = new PDO("mysql:host=$servername; dbname=$dbname", $username, $password);
-  // set the PDO error mode to exception
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+return new PDO("mysql:host=$servername; dbname=$dbname", $username, $password);
+ 
+}
+catch(Exception $e){
+	try{
+	$servername = "10.244.0.21";
+	$username = "test";
+	$password = "password";
+	$dbname = "test";
+	return new PDO("mysql:host=$servername; dbname=$dbname", $username, $password);
+	}
+	catch(Exception $e){
+		die("failed to connect to MySQL database: ". $e->getMessage()."\n");
+	}
 
+}
+}
+$db = get_connection();
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 function login($username,$pass){
 	//TODO Make login function
 	global $db;
